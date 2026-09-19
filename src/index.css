@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { background: theme('colors.fog'); color: theme('colors.ink'); }
+  body { @apply font-sans antialiased; margin: 0; min-height: 100vh; }
+  h1, h2, h3 { @apply font-display; letter-spacing: -0.01em; }
+  :focus-visible { outline: 3px solid theme('colors.line-blue'); outline-offset: 2px; border-radius: 6px; }
+  button { @apply cursor-pointer; }
+  button:disabled, button[aria-disabled='true'] { @apply cursor-not-allowed; }
+}
+
+@layer components {
+  .panel { @apply bg-paper border border-rule rounded-panel; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors; }
+  .btn-primary { @apply btn bg-line-blue text-white hover:bg-[#244d96] disabled:bg-rule disabled:text-ink2; }
+  .btn-quiet { @apply btn bg-transparent text-ink border border-rule hover:bg-fog; }
+  .btn-danger { @apply btn bg-signal text-white hover:bg-[#b73d31]; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
