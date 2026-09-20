@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import type { LifeSummaryView } from '../ui/types'
+import { playCue } from '../audio/audio'
 
 function Block({ title, items }: { title: string; items: string[] }) {
   return (
@@ -23,6 +25,10 @@ interface Props {
 }
 
 export function EndSummary({ summary, onStartNewLife }: Props) {
+  useEffect(() => {
+    playCue('complete')
+  }, [])
+
   return (
     <div className="fixed inset-0 z-40 overflow-y-auto bg-fog p-4">
       <div role="dialog" aria-modal="true" aria-labelledby="end-title" className="panel mx-auto my-6 max-w-3xl p-6 sm:p-8">
@@ -50,7 +56,7 @@ export function EndSummary({ summary, onStartNewLife }: Props) {
         </div>
 
         <div className="mt-8">
-          <button type="button" className="btn-primary" onClick={onStartNewLife} autoFocus>
+          <button type="button" className="btn-primary" data-sfx="start" onClick={onStartNewLife} autoFocus>
             Start New Life
           </button>
         </div>

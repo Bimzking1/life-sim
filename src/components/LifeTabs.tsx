@@ -43,6 +43,7 @@ export function LifeTabs({ career, courses, inventory, properties, onCourseActio
             aria-controls={`panel-${t.id}`}
             type="button"
             onClick={() => setTab(t.id)}
+            data-sfx="select"
             className={`-mb-px flex items-center gap-2 rounded-t-lg border border-b-0 px-3.5 py-2 text-sm font-semibold ${
               tab === t.id ? 'border-rule bg-paper' : 'border-transparent text-ink2 hover:text-ink'
             }`}

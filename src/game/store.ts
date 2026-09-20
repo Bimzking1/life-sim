@@ -29,6 +29,8 @@ import {
   selectSummary,
 } from './selectors'
 import type { ToastItem } from '../components/Toasts'
+import type { CueName } from 'uisfx'
+import { playCue } from '../audio/audio'
 
 export interface GameStoreView {
   showStart: boolean
@@ -64,6 +66,12 @@ export interface GameStore {
   dismissToast: (id: string) => void
 }
 
+const toneCue: Record<ToastItem['tone'], CueName> = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+}
+
 export function useGame(): GameStore {
   const [game, setGame] = useState(() => newGame())
   const [showStart, setShowStart] = useState(true)
@@ -73,6 +81,12 @@ export function useGame(): GameStore {
   const [autosaveInfo, setAutosaveInfo] = useState<{ label: string | null; detail: string | null }>({ label: null, detail: null })
   const randRef = useRef<() => number>(mulberry32(randomSeed()))
   const timerRef = useRef<number | null>(null)
+  const prevStateRef = useRef<GameState>(game)
+
+  const setGameSync = useCallback((next: GameState) => {
+    prevStateRef.current = next
+    setGame(next)
+  }, [])
 
   useEffect(() => {
     const info = loadAutosave()
@@ -83,6 +97,7 @@ export function useGame(): GameStore {
   }, [])
 
   const toast = useCallback((tone: ToastItem['tone'], text: string) => {
+    playCue(toneCue[tone])
     const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`
     setToasts((t) => [...t, { id, tone, text }])
     if (timerRef.current) window.clearTimeout(timerRef.current)
@@ -97,14 +112,17 @@ export function useGame(): GameStore {
       checkAchievements(draft)
       applyPropertyUpgrade(draft)
       gameOverFromState(draft)
+      const prev = prevStateRef.current
+      if (draft.achievements.length > prev.achievements.length) playCue('reward')
+      if (!prev.events.pending && draft.events.pending) playCue('notification')
       if (draft.gameOver) {
         draft.events.pending = null
         setShowEnd(true)
       }
-      setGame(draft)
+      setGameSync(draft)
       saveAutosave(draft)
     },
-    [],
+    [setGameSync],
   )
 
   const makeCtx = useCallback(
@@ -148,13 +166,13 @@ export function useGame(): GameStore {
   const startFreshLife = useCallback(() => {
     clearAutosave()
     randRef.current = mulberry32(randomSeed())
-    setGame(newGame())
+    setGameSync(newGame())
     setShowStart(false)
     setShowEnd(false)
     setShowConfirm(false)
     setAutosaveInfo({ label: null, detail: null })
     toast('success', 'A new life begins.')
-  }, [toast])
+  }, [setGameSync, toast])
 
   const handlers: UiHandlers = useMemo(
     () => ({
@@ -186,7 +204,7 @@ export function useGame(): GameStore {
         reader.onload = () => {
           try {
             const state = parseSaveFile(JSON.parse(String(reader.result)))
-            setGame(state)
+            setGameSync(state)
             setShowStart(false)
             setShowEnd(false)
             saveAutosave(state)
@@ -204,7 +222,7 @@ export function useGame(): GameStore {
           toast('error', 'No autosave found.')
           return
         }
-        setGame(info.gameState)
+        setGameSync(info.gameState)
         setShowStart(false)
         toast('success', 'Continue your life.')
       },

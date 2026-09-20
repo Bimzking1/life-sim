@@ -1,16 +1,23 @@
-import { useRef } from 'react'
-import { FolderOpen, Play, Plus } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { FolderOpen, Play, Plus, ScrollText } from 'lucide-react'
 import type { SaveSlotInfo } from '../ui/types'
+import { playCue } from '../audio/audio'
 
 interface Props {
   autosave: SaveSlotInfo | null
   onContinue: () => void
   onNewGame: () => void
   onLoadFile: (file: File) => void
+  onOpenChangelog: () => void
 }
 
-export function StartScreen({ autosave, onContinue, onNewGame, onLoadFile }: Props) {
+export function StartScreen({ autosave, onContinue, onNewGame, onLoadFile, onOpenChangelog }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    playCue('open')
+  }, [])
+
   return (
     <div className="fixed inset-0 z-30 grid place-items-center bg-fog p-4">
       <div className="w-full max-w-md">
@@ -19,7 +26,7 @@ export function StartScreen({ autosave, onContinue, onNewGame, onLoadFile }: Pro
 
         <div className="mt-8 space-y-3">
           {autosave && (
-            <button type="button" onClick={onContinue} className="panel flex w-full items-center gap-3 p-4 text-left hover:border-ink">
+            <button type="button" onClick={onContinue} data-sfx="select" className="panel flex w-full items-center gap-3 p-4 text-left hover:border-ink">
               <Play size={20} aria-hidden className="text-line-blue" />
               <span>
                 <span className="block font-semibold">Continue {autosave.label}</span>
@@ -27,14 +34,14 @@ export function StartScreen({ autosave, onContinue, onNewGame, onLoadFile }: Pro
               </span>
             </button>
           )}
-          <button type="button" onClick={onNewGame} className="panel flex w-full items-center gap-3 p-4 text-left hover:border-ink">
+          <button type="button" onClick={onNewGame} data-sfx="start" className="panel flex w-full items-center gap-3 p-4 text-left hover:border-ink">
             <Plus size={20} aria-hidden className="text-line-green" />
             <span>
               <span className="block font-semibold">Start a new life</span>
               <span className="block text-sm text-ink2">Begin at age 18.</span>
             </span>
           </button>
-          <button type="button" onClick={() => fileRef.current?.click()} className="panel flex w-full items-center gap-3 p-4 text-left hover:border-ink">
+          <button type="button" onClick={() => fileRef.current?.click()} data-sfx="open" className="panel flex w-full items-center gap-3 p-4 text-left hover:border-ink">
             <FolderOpen size={20} aria-hidden className="text-line-yellow" />
             <span>
               <span className="block font-semibold">Load a save file</span>
@@ -53,6 +60,11 @@ export function StartScreen({ autosave, onContinue, onNewGame, onLoadFile }: Pro
               e.target.value = ''
             }}
           />
+          <div className="pt-2">
+            <button type="button" onClick={onOpenChangelog} data-sfx="open" className="btn-quiet w-full justify-center gap-2 rounded-lg py-2.5 text-sm text-ink2 hover:text-ink">
+              <ScrollText size={16} aria-hidden /> Changelog
+            </button>
+          </div>
         </div>
       </div>
     </div>

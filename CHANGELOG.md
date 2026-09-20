@@ -25,6 +25,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     corrupt, unversioned, or newer-version save files.
 - **Vitest setup** — `vitest.config.ts`, the `test: vitest run` npm script, and
   `vitest@^2` (compatible with the project's Vite 5).
+- **Sound design** — sci-fi UI sound effects on every button and key game
+  action, synthesized locally at runtime via `uisfx` (scifi pack; CC0, no audio
+  assets to ship). Press/hover/click cues plus context-aware sounds for modals
+  (open/close), saves (checkpoint), toasts (success/error/info), achievements
+  (reward), random events (notification), game over (complete), and destructive
+  confirms (delete).
+- **Ambient background music** — a procedural, focus-style pad loop generated
+  live with the Web Audio API (slow chord pads, sub bass, sparse pentatonic
+  sparkle notes, breathing lowpass). No audio files, no copyrighted tracks; it
+  starts after the first user interaction (autoplay policy).
+- **Sound settings** — a popover (splash + in-game top bar) with independent
+  Sound Effects and Background Music toggles, persisted in `localStorage`
+  (`lifeline:sfx-enabled`, `lifeline:music-enabled`).
+- **Theme toggle** — dark/light switcher on the splash screen and in the top
+  bar, persisting the choice under `lifeline:theme`.
+- **Splash screen & changelog page** — the app now opens on a fading landing
+  screen for the Lifeline brand, and a dedicated changelog page (routing via
+  `route`/`returnTo` in `App.tsx`) is reachable from the new-game screen.
 
 ### Fixed
 

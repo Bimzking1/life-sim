@@ -1,6 +1,16 @@
 export const GAME_NAME = 'Lifeline'
 export const DEFAULT_PLAYER_NAME = 'Alex Rivera'
 
+/** localStorage key storing the chosen theme ('dark' | 'light'). */
+export const THEME_STORAGE_KEY = 'lifeline:theme'
+/** Theme used when no preference is stored yet. */
+export const DEFAULT_THEME = 'dark'
+
+/** localStorage key storing whether sound effects are enabled. */
+export const SFX_ENABLED_KEY = 'lifeline:sfx-enabled'
+/** localStorage key storing whether background music is enabled. */
+export const MUSIC_ENABLED_KEY = 'lifeline:music-enabled'
+
 export const CURRENT_SAVE_VERSION = 1
 export const AUTOSAVE_KEY = 'lifeline:autosave:v1'
 

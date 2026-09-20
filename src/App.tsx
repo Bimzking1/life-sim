@@ -1,13 +1,32 @@
+import { useEffect, useState } from 'react'
 import { GameScreen } from './GameScreen'
 import { EventModal } from './components/EventModal'
 import { EndSummary } from './components/EndSummary'
 import { ConfirmDialog } from './components/ConfirmDialog'
 import { StartScreen } from './components/StartScreen'
+import { SplashScreen } from './components/SplashScreen'
+import { ChangelogPage } from './components/ChangelogPage'
 import { Toasts } from './components/Toasts'
 import { useGame } from './game/store'
+import { bindGlobalSfx } from './audio/audio'
+
+type Route = 'splash' | 'game' | 'changelog'
 
 export default function App() {
   const { view, handlers, startFreshLife, dismissConfirm, dismissToast } = useGame()
+
+  useEffect(() => bindGlobalSfx(), [])
+  const [route, setRoute] = useState<Route>('splash')
+  const [returnTo, setReturnTo] = useState<Route>('splash')
+
+  const openChangelog = () => {
+    setReturnTo(route)
+    setRoute('changelog')
+  }
+
+  if (route === 'changelog') return <ChangelogPage onBack={() => setRoute(returnTo)} />
+  if (route === 'splash')
+    return <SplashScreen onPlay={() => setRoute('game')} />
 
   return (
     <>
@@ -33,6 +52,7 @@ export default function App() {
           onContinue={handlers.onContinueAutosave}
           onNewGame={handlers.onNewGame}
           onLoadFile={handlers.onLoadFile}
+          onOpenChangelog={openChangelog}
         />
       )}
       {view.event && (
