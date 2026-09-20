@@ -43,6 +43,7 @@ function ShopList({ items, onBuy }: { items: ShopItemView[]; onBuy: (id: string)
             type="button"
             aria-pressed={cat === c}
             onClick={() => setCat(c)}
+            data-sfx="select"
             className={`rounded-full border px-3 py-1 text-sm font-medium ${cat === c ? 'border-ink bg-ink text-paper' : 'border-rule bg-paper hover:bg-fog'}`}
           >
             {c}
@@ -62,7 +63,7 @@ function ShopList({ items, onBuy }: { items: ShopItemView[]; onBuy: (id: string)
             </div>
             <div className="mt-3 flex items-center justify-between">
               <span className="text-xs text-ink2">{item.owned ? `You own ${item.owned}` : item.category}</span>
-              <button type="button" className="btn-primary" disabled={Boolean(item.disabledReason)} onClick={() => onBuy(item.id)}>
+              <button type="button" className="btn-primary" data-sfx="purchase" disabled={Boolean(item.disabledReason)} onClick={() => onBuy(item.id)}>
                 Buy
               </button>
             </div>

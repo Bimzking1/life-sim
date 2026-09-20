@@ -16,7 +16,7 @@ export function ConfirmDialog({ title, body, confirmLabel, danger, onConfirm, on
       <p className="mt-2 text-ink2">{body}</p>
       <div className="mt-6 flex justify-end gap-2">
         <button type="button" className="btn-quiet" onClick={onCancel}>Keep playing</button>
-        <button type="button" className={danger ? 'btn-danger' : 'btn-primary'} onClick={onConfirm}>{confirmLabel}</button>
+        <button type="button" data-sfx={danger ? 'delete' : 'select'} className={danger ? 'btn-danger' : 'btn-primary'} onClick={onConfirm}>{confirmLabel}</button>
       </div>
     </Modal>
   )

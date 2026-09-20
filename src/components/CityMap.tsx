@@ -68,6 +68,7 @@ export function CityMap({ locations, currentId, selectedId, onSelect }: CityMapP
               key={loc.id}
               type="button"
               onClick={() => onSelect(loc.id)}
+              data-sfx="select"
               aria-pressed={isSelected}
               aria-label={`${loc.name}${isCurrent ? ', you are here' : ''}${loc.isOpen ? '' : ', closed'}`}
               className="group absolute -translate-x-1/2 -translate-y-1/2"

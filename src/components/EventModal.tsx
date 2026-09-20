@@ -18,6 +18,7 @@ export function EventModal({ event, onChoose }: Props) {
               type="button"
               disabled={Boolean(c.disabledReason)}
               onClick={() => onChoose(c.id)}
+              data-sfx="select"
               className="w-full rounded-lg border border-rule bg-paper p-3 text-left transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:border-rule"
             >
               <span className="block font-semibold">{c.label}</span>

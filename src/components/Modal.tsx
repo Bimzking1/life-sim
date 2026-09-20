@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { playCue } from '../audio/audio'
 
 interface ModalProps {
   labelledBy: string
@@ -14,7 +15,14 @@ export function Modal({ labelledBy, onEscape, wide, children }: ModalProps) {
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
     ref.current?.querySelector<HTMLElement>('button:not([disabled]), [tabindex]')?.focus()
-    return () => previous?.focus()
+    return () => {
+      previous?.focus()
+      playCue('close')
+    }
+  }, [])
+
+  useEffect(() => {
+    playCue('open')
   }, [])
 
   return (
